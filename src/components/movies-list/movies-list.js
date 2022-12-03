@@ -21,12 +21,10 @@ export default class MoviesList extends Component {
         </li>
       );
     });
-    // console.log(elements);
+    console.log(elements);
     return (
-      <ul className="movies-list">
-        {elements}
-        list
-      </ul>
+      <ul className="movies-list">{elements}</ul>
+      // list
     );
   }
 }
