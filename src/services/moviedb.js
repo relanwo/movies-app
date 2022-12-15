@@ -7,7 +7,7 @@ export default class MovieApiService {
     const res = await fetch(`${this._apiBase}${url}`);
 
     if (!res.ok) {
-      throw new Error(`Could not fetch ${url}, receiver ${res.status}`);
+      throw new Error(`Could not fetch ${url}, received ${res.status}`);
     }
 
     const result = await res.json();
@@ -15,11 +15,18 @@ export default class MovieApiService {
   }
 
   // &query=The%20way%20back
-  async getMovies(title) {
+  async getAllMovies(title) {
     const res = await this.getResource(`&query=${title}`);
-    console.log('completed');
+    console.log(res.results);
     return res.results;
   }
+
+  // getAllMovies = (title) => {
+  //   fetch()
+  //   const res = await this.getResource(`&query=${title}`);
+  //   console.log('completed');
+  //   return res.results;
+  // }
 
   // async getAllPeople() {
   // const res = await this.getResource(`/people/`);
@@ -47,12 +54,25 @@ export default class MovieApiService {
   // getStarship(id) {
   // return this.getResource(`/starships/${id}`);
   // }
+
+  //   static transformFilmData(movie) {
+  //     return {
+  //       id: movie.id,
+  //       genreIds: movie.genre_ids,
+  //       overview: movie.overview,
+  //       releaseDate: movie.release_date,
+  //       title: movie.title,
+  //       posterPath: movie.poster_path,
+  //     };
+  //   }
 }
 
-// const movies = new MovieService();
+const movies = new MovieApiService();
 
-// movies.getMovie().then((movie) => {
-// movie.forEach((p) => {
-// console.log(p);
+// movies.getAllMovies('return').then((movie) => {
+//   movie.forEach((p) => {
+//     console.log(p);
+//   });
 // });
-// });
+
+movies.getAllMovies('return');
