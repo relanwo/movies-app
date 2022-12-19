@@ -4,7 +4,8 @@ import PropTypes from 'prop-types';
 // import { PropTypes } from 'prop-types';
 import { Spin, Pagination, Alert } from 'antd';
 
-import MovieCard from '../movie-card';
+import MovieCard from '../movie-card/movie-card';
+// import MoviesPagination from '../movies-pagination/movies-pagination';
 
 import './movies-list.css';
 

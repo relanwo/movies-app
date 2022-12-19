@@ -10,7 +10,8 @@ import { debounce } from 'lodash';
 import 'antd/dist/reset.css';
 import { Input, Tabs, Alert } from 'antd';
 
-import MoviesList from '../movies-list';
+// import Search from 'antd/es/transfer/search';
+import MoviesList from '../movies-list/movies-list';
 
 // eslint-disable-next-line import/no-named-as-default, import/no-named-as-default-member
 import MovieApiService from '../../services/moviedb';
@@ -51,8 +52,28 @@ export default class App extends Component {
       loading: false,
       error: false,
       inputValue: '',
+      // genresList: null,
+      // selectedPage: 'search',
+      // savedInputSearch: '',
+      // savedCurrentPage: {
+      //  searchPage: 1,
+      //  ratedPage: 1,
+      // }
     };
   }
+
+  // componentDidMount() {
+  //   window.addEventListener("offline", () => {
+  //     this.setState({ error: new Error("Internet connection is failed") })
+  //   })
+
+  //   window.addEventListener("offline", () => {
+  //     this.setState({ error: null })
+  //   })
+
+  //   // this.getGenres()
+  //   // this.movieService.createGuestSession()
+  // }
 
   // componentDidMount() {
   //   // this.getAllMovies(this.inputRequestFormater(this.state.inputValue));
@@ -126,10 +147,34 @@ export default class App extends Component {
   // eslint-disable-next-line react/no-unused-class-component-methods
   inputRequestFormater = (text) => text.split(' ').join('+');
 
+  // onChangeInputValue = (value) => this.setState({ savedInputSearch: value })
+
+  // onChangeCurrentPage = (page, searchFlag) => {
+  //   this.setState({ savedCurrentPage }) => {
+  //     const newObj = { ...savedCurrentPage }
+  //     if (searchFlag) {
+  //       newObj.searchPage = page
+  //     } else newObj.reatedPage = page
+  //     return { savedCurrentPage: newObj }
+  //   })
+  // }
+
+  // getGenres = () => {
+  //   this.MovieApiService
+  //     .getGenres()
+  //     .then((genresList) => this.setState({ genresList }))
+  //     .catch((err) => this.setState({ error }))
+  // }
+
   render() {
     const {
       films, error, loading, inputValue,
+      // selectedPage, savedInputSearch, savedCurrentPage
     } = this.state;
+    // const menu = [
+    //   { label: "Search", key: "search"},
+    //   { label: "Rated", key: "rated"},
+    // ]
 
     return (
       <div className="app">
@@ -167,6 +212,34 @@ export default class App extends Component {
     );
   }
 }
+
+// return (
+//   <GenresProvider value={genresList}>
+//     {error ? <Alert message="Enter the search query above to start" type="error" showIcon /> : null}
+//     <section className='movie-app'>
+//       <Menu
+//         className="movie-app__menu"
+//         items={menu}
+//         mode="horisontal"
+//         selectedKeys={selectedPage}
+//         onSelect={this.onSelect}
+//       />
+//       {selectedPage === "search" ? (
+//         <Search
+//           onChangeInputValue={this.onChangeInputValue}
+//           savedInputSearch={savedInputSearch}
+//           savedCurrentPage={savedCurrentPage}
+//           onChangeCurrentPage={this.onChangeCurrentPage}
+//         />
+//       ) : (
+//         <Reted
+//           savedCurrentPage={savedCurrentPage}
+//           onChangeCurrentPage={this.onChangeCurrentPage}
+//         />
+//       )}
+//     </section>
+//   <GenresProvider/>
+// )
 
 // /* <Pagination defaultCurrent={1} total={50} /> */
 
