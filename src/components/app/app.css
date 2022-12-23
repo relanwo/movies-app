@@ -1,0 +1,69 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter&display=swap');
+
+html {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  font-weight: 400;
+}
+
+#root {
+  max-width: 75%;
+  margin: 0 auto;
+}
+
+.app,
+.ant-tabs-tabpane {
+  display: flex;
+  flex-direction: column;
+}
+
+button {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  font-size: 100%;
+  vertical-align: baseline;
+  font-family: inherit;
+  font-weight: inherit;
+  color: inherit;
+  -webkit-appearance: none;
+  appearance: none;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+button::-moz-focus-inner {
+  border: none;
+}
+
+/* body {
+  font-family: 'Inter', sans-serif;
+  line-height: 1.4em;
+  background: #ffffff;
+  color: #111111;
+  min-width: 230px;
+  max-width: 1010px;
+  margin: 0 auto;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-weight: 400;
+} */
+
+/* :focus {
+  outline: 0;
+} */
+
+.hidden {
+  display: none;
+}
+
+.ant-spin.ant-spin-spinning {
+  align-self: center;
+  margin: 50vh 50%;
+}

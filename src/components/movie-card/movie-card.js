@@ -14,6 +14,7 @@ import './movie-card.css';
 const { Sider, Content } = Layout;
 
 export default class MovieCard extends Component {
+  key = 100;
   // constructor(props) {
   //   super(props);
   //   this.state = {
@@ -43,7 +44,7 @@ export default class MovieCard extends Component {
     const arr = text.split(' ');
     if (arr.length <= amountOfWords) return arr.join(' ');
 
-    return `${arr.slice(0, amountOfWords - 1).join(' ')} ...`;
+    return `${arr.slice(0, amountOfWords - 1).join(' ')}...`;
   };
 
   render() {
@@ -62,13 +63,19 @@ export default class MovieCard extends Component {
     } = this.props;
     // {} = this.state;
 
-    const genreLabel = genreIds.map((genre, index) => (
+    const genreLabel = genreIds.map((genre) => (
       // eslint-disable-next-line react/no-array-index-key
-      <span className="genre-wrapper" key={index}>
+      <span className="genre-wrapper" key={this.key++}>
         {genre}
       </span>
     ));
 
+    const date = releaseDate !== null ? (
+      <span className="date">
+        {intlFormat(new Date(releaseDate), { year: 'numeric', month: 'long', day: 'numeric' })}
+        {' '}
+      </span>
+    ) : null;
     // if (error) {
     //   return <p>Oops... it is an ERROR</p>;
     // }
@@ -94,15 +101,7 @@ export default class MovieCard extends Component {
           </Sider>
           <Content>
             <h3 className="title">{title}</h3>
-            <span className="date">
-              {intlFormat(
-                new Date(releaseDate),
-                { year: 'numeric', month: 'long', day: 'numeric' },
-                // {
-                //   locale: 'en-EN',
-                // },
-              )}
-            </span>
+            {date}
             {/* format(parseISO(releaseDate), 'MMMM d, yyyy') */}
             <Progress
               type="circle"

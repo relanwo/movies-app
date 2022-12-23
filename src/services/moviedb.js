@@ -15,12 +15,42 @@ export default class MovieApiService {
   }
 
   // &query=The%20way%20back
-  async getAllMovies(title) {
-    const res = await this.getResource(`&query=${title}`);
-    console.log(res.results);
+  async getAllMovies(searchQuery) {
+    const res = await this.getResource(`&query=${searchQuery}`);
+    // console.log(res.results);
     return res.results;
   }
 
+  async getBySearch(searchQuery, page = 1) {
+    const body = await this.getResource(`&page=${page}&query=${searchQuery}&`);
+    if (body.results.length === 0 && navigator.onLine) {
+      throw new Error('Nothing found');
+    }
+    // body.results.forEach((movie) => {
+    //   this._transformMovie(movie);
+    // });
+    // console.log(typeof body.results);
+    return body;
+  }
+  // return body;
+
+  getMovie(id) {
+    return this.getResource(`/movie/${id}?`);
+  }
+
+  _transformMovie = (movie) => ({
+    id: movie.id,
+    genreIds: movie.genre_ids,
+    overview: movie.overview,
+    releaseDate: movie.release_date,
+    title: movie.title,
+    posterPath: movie.poster_path,
+  });
+
+  _transformInfo = (info) => ({
+    totalPages: info.total_pages,
+    totalResults: info.total_pages,
+  });
   // getAllMovies = (title) => {
   //   fetch()
   //   const res = await this.getResource(`&query=${title}`);
@@ -67,7 +97,7 @@ export default class MovieApiService {
   //   }
 }
 
-const movies = new MovieApiService();
+// const movies = new MovieApiService();
 
 // movies.getAllMovies('return').then((movie) => {
 //   movie.forEach((p) => {
@@ -75,4 +105,5 @@ const movies = new MovieApiService();
 //   });
 // });
 
-movies.getAllMovies('return');
+// console.log(movies.getAllMovies('return'));
+// console.log(movies.getBySearch('return'));

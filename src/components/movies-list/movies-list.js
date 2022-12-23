@@ -1,8 +1,9 @@
+/* eslint-disable react/prop-types */
 /* eslint-disable no-console */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 // import { PropTypes } from 'prop-types';
-import { Spin, Pagination, Alert } from 'antd';
+import { Spin, Alert } from 'antd';
 
 import MovieCard from '../movie-card/movie-card';
 // import MoviesPagination from '../movies-pagination/movies-pagination';
@@ -13,61 +14,40 @@ import './movies-list.css';
 
 export default class MoviesList extends Component {
   render() {
-    const { films, error, loading } = this.props;
+    const {
+      data, error, errorMessage, errorType, loading,
+    } = this.props.options;
 
-    // if (loading) {
-    //   return <Spin />;
-    // }
-    // if (films.length === 0) {
-    // <p>Oops... no results</p>
-
-    const elements = films.map((item) => {
-      const { id, ...movieProps } = item;
-      // console.log('a');
+    const movies = data.map((movie) => {
+      const { ...movieProps } = movie;
       return (
-        <li key={id} className="card">
-          <MovieCard id={id} {...movieProps} error={error} loading={loading} />
+        <li key={movie.id} className="movie-item card">
+          <MovieCard {...movieProps} />
+          {/* // error={error} loading={loading} /> */}
         </li>
       );
     });
-    // console.log(elements);
 
-    const pagination = elements.length !== 0 ? <Pagination defaultCurrent={1} pageSize={20} total={50} /> : null;
+    // const pagination = elements.length !== 0 ? <Pagination defaultCurrent={1} pageSize={20} total={50} /> : null;
 
-    const errorMessage = error ? (
-      <Alert message="Error" description="Oops... something went wrong" type="error" showIcon />
-    ) : null;
-    const spiner = loading ? <Spin /> : null;
+    const hasData = !(loading || error);
 
-    const hasData = !(loading || error) && (elements.length !== 0);
-    const content = hasData ? (
-      <>
-        <ul className="movies-list">{elements}</ul>
-        {pagination}
-      </>
-    ) : (<Alert message="Unfortunatly, there is no results for this search" type="info" showIcon />);
-    // const content = hasData && elements.length === 0 ? (
-    //   <Alert message="Unfortunatly, there is no results for this search" type="info" showIcon />
-    // ) : (
-    //   <>
-    //     <ul className="movies-list">{elements}</ul>
-    //     {pagination}
-    //   </>
-    // );
+    const spinner = loading ? <Spin size="large" /> : null;
+    const hasError = error ? <Alert message={error} description={errorMessage} type={errorType} showIcon /> : null;
+    const content = hasData ? <ul className="movies-list">{movies}</ul> : null;
 
     return (
       <>
-        {errorMessage}
-        {spiner}
+        {hasError}
+        {spinner}
         {content}
       </>
-      // list
     );
   }
 }
 
 MoviesList.propTypes = {
-  films: PropTypes.arrayOf(
+  data: PropTypes.arrayOf(
     PropTypes.shape({
       // color: React.PropTypes.string.isRequired,
       // fontSize: React.PropTypes.number.isRequired,
@@ -85,5 +65,5 @@ MoviesList.propTypes = {
 };
 
 MoviesList.defaultProps = {
-  films: [],
+  data: [],
 };
