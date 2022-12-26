@@ -14,16 +14,8 @@
   padding: 0 !important;
 }
 
-.ant-layout,
-.ant-layout-sider {
+.ant-layout {
   height: 100% !important;
-}
-
-img.poster {
-  display: inline-block;
-  border-radius: 0;
-  width: 100%;
-  height: 280px;
 }
 
 .ant-layout-content {
@@ -33,13 +25,14 @@ img.poster {
 h3.title {
   font-size: 1.25rem;
   margin-bottom: 7px;
-  max-width: 250px;
+  max-width: 180px;
 }
 
 span.date {
   color: #827e7e;
   font-size: 0.75rem;
   margin-bottom: 7px;
+  display: block;
 }
 
 .ant-progress {
@@ -67,5 +60,13 @@ p.description {
 
 .ant-rate {
   position: absolute;
-  bottom: 20px;
+  bottom: 5px !important;
+}
+
+.show-more {
+  cursor: pointer;
+}
+
+.ant-typography {
+  margin-top: 5px;
 }

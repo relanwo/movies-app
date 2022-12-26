@@ -7,14 +7,15 @@ import React, { Component } from 'react';
 import { Offline, Online } from 'react-detect-offline';
 
 import 'antd/dist/reset.css';
-import { Alert } from 'antd';
+import { Alert, Tabs } from 'antd';
 
 // import Search from 'antd/es/transfer/search';
 import MoviesList from '../movies-list/movies-list';
 import MoviePagination from '../movie-pagination/movie-pagination';
-import MovieTabs from '../movie-tabs/movie-tabs';
+// import MovieTabs from '../tabs/tabs';
 import NoElements from '../no-elements/no-elements';
 import SearchPanel from '../search-panel/search-panel';
+import { GenresContextProvider } from '../genres-context/genres-context';
 
 // eslint-disable-next-line import/no-named-as-default, import/no-named-as-default-member
 import MovieApiService from '../../services/moviedb';
@@ -26,60 +27,34 @@ export default class App extends Component {
     super(props);
     this.api = new MovieApiService();
     this.state = {
-      data: [
-        // {
-        // 	id: 1,
-        // 	title: 'syxdr',
-        // 	releaseDate: 456,
-        // 	genreIds: [4, 6],
-        // 	overview: 'dffffffffffffffffffffffghjjjjjjjjjjjj',
-        // 	posterPath: null,
-        // },
-        // {
-        // 	id: 2,
-        // 	title: 'sfy45253',
-        // 	releaseDate: 457,
-        // 	genreIds: [1, 6],
-        // 	overview: 'age',
-        // 	posterPath: null,
-        // },
-        // {
-        // 	id: 3,
-        // 	title: '8909876',
-        // 	releaseDate: 657764987,
-        // 	genreIds: [0],
-        // 	overview: 'q    qwie',
-        // 	posterPath: null,
-        // },
-      ],
+      data: [],
+      search: '',
+      // genreIds: [],
+      ratedData: localStorage.getItem('ratedMovies'),
       loading: false,
       error: false,
       errorMessage: null,
       errorType: null,
-      search: '',
       noElements: false,
-      // genresList: null,
-      // selectedPage: 'search',
-      // savedInputSearch: '',
-      // savedCurrentPage: {
-      //  searchPage: 1,
-      //  ratedPage: 1,
-      // }
+      // totalPages: null,
     };
   }
 
-  // componentDidMount() {
-  //   window.addEventListener("offline", () => {
-  //     this.setState({ error: new Error("Internet connection is failed") })
-  //   })
+  componentDidMount() {
+    // sessionStorage.clear();
+    // this.api.createGuestSession();
+    // this.api.createGuestSession();
+    this.api.getGenres().then((response) => this.setState({ genres: response }));
+    //   window.addEventListener("offline", () => {
+    //     this.setState({ error: new Error("Internet connection is failed") })
+    //   })
 
-  //   window.addEventListener("offline", () => {
-  //     this.setState({ error: null })
-  //   })
+    //   window.addEventListener("offline", () => {
+    //     this.setState({ error: null })
+    //   })
 
-  //   // this.getGenres()
-  //   // this.movieService.createGuestSession()
-  // }
+    // this.getGenres();
+  }
 
   // componentDidMount() {
   //   // this.getAllMovies(this.inputRequestFormater(this.state.inputValue));
@@ -123,59 +98,6 @@ export default class App extends Component {
     });
   };
 
-  // eslint-disable-next-line react/no-unused-class-component-methods
-  // onValueChange = (e) => {
-  //   this.setState({
-  //     // eslint-disable-next-line react/no-unused-state
-  //     search: e.target.value,
-  //     loading: true,
-  //   });
-  //   // console.log(this.inputRequestFormater(this.state.inputValue));
-  // };
-
-  // eslint-disable-next-line react/no-unused-class-component-methods
-  // getAllMovies(title) {
-  //   this.api
-  //     .getAllMovies(title)
-  //     .then(this.onMoviesLoaded)
-  //     // .then((movies) => {
-  //     // movies.forEach((movie) => {
-  //     //   const { films } = this.state;
-  //     //   films.push({
-  //     //     id: movie.id,
-  //     //     genreIds: movie.genre_ids,
-  //     //     overview: movie.overview,
-  //     //     releaseDate: movie.release_date,
-  //     //     title: movie.title,
-  //     //     posterPath: movie.poster_path,
-  //     //   });
-  //     // });
-  //     // })
-  //     .catch(this.onError);
-  //   // console.log('completed app');
-  // }
-
-  // eslint-disable-next-line react/no-unused-class-component-methods
-  // inputRequestFormater = (text) => text.split(' ').join('+');
-
-  // onChangeInputValue = (value) => this.setState({ savedInputSearch: value })
-
-  // onChangeCurrentPage = (page, searchFlag) => {
-  //   this.setState({ savedCurrentPage }) => {
-  //     const newObj = { ...savedCurrentPage }
-  //     if (searchFlag) {
-  //       newObj.searchPage = page
-  //     } else newObj.reatedPage = page
-  //     return { savedCurrentPage: newObj }
-  //   })
-  // }
-
-  // getGenres = () => {
-  //   this.MovieApiService
-  //     .getGenres()
-  //     .then((genresList) => this.setState({ genresList }))
-  //     .catch((err) => this.setState({ error }))
-  // }
   onSearch = (search = '', page = 1) => {
     if (search === '') {
       return this.setState({
@@ -189,9 +111,8 @@ export default class App extends Component {
     return (
       this.api
         .getBySearch(search, page)
-        // .then(this.onMoviesLoaded)
         .then(this.onListLoaded)
-        .then(console.log(this.state.data))
+        // .then(console.log(this.state.data))
         .catch((error) => {
           this.onError(error);
         })
@@ -200,7 +121,6 @@ export default class App extends Component {
 
   onListLoaded = (fullMoviesData) => {
     const moviesData = fullMoviesData.results;
-    // console.log(typeof moviesData);
     this.setState({
       data: this.onMoviesLoaded(moviesData),
       loading: false,
@@ -209,32 +129,82 @@ export default class App extends Component {
       totalPages: fullMoviesData.total_pages,
       totalResults: fullMoviesData.total_results,
     });
+    // console.log(fullMoviesData);
+    // console.log(`fullMoviesData.total_results ${fullMoviesData.total_results}`);
+    // console.log(`fullMoviesData.total_pages ${fullMoviesData.total_pages}`);
+    // console.log(`this.state.total_pages ${this.state.total_pages}`);
   };
 
   onMoviesLoaded = async (movies) => {
-    console.log(movies);
+    // console.log(movies);
     const transformedData = await movies.map((movie) => ({
       id: movie.id,
       genreIds: movie.genre_ids,
+      // genres: movie.genres,
       overview: movie.overview,
       releaseDate: movie.release_date,
       title: movie.title,
       posterPath: movie.poster_path,
       voteAverage: movie.vote_average,
     }));
-    // movies.forEach((movie) => {
-    //   const { data } = this.state;
-    //   data.push({
-    //     id: movie.id,
-    //     genreIds: movie.genre_ids,
-    //     overview: movie.overview,
-    //     releaseDate: movie.release_date,
-    //     title: movie.title,
-    //     posterPath: movie.poster_path,
-    //     voteAverage: movie.vote_average,
-    //   });
-    // });
     this.setState({ data: transformedData });
+  };
+
+  onRate = async (page = 1) => {
+    this.setState({ loading: true });
+    const data = JSON.parse(localStorage.getItem('ratedMovies'));
+    console.log(data);
+    const result = [];
+    // eslint-disable-next-line no-restricted-syntax
+    for await (const i of data) {
+      await this.api
+        .getMovie(i.movieId)
+        .then((item) => result.push(item))
+        .catch((error) => {
+          this.onError(error);
+        });
+    }
+    // console.log(`result onRate ${result}`);
+    // console.log(result);
+    this.onRatedListLoaded(result);
+    // console.log(result);
+    this.setState({ data: result });
+    // console.log(this.state);
+    // this.setState({ loading: false });
+  };
+
+  // eslint-disable-next-line react/no-unused-class-component-methods
+  onRatedListLoaded = (moviesData) => {
+    // console.log(Math.ceil(moviesData.length / 20));
+    this.setState({
+      data: this.onMoviesRated(moviesData),
+      loading: false,
+      error: false,
+      noElements: false,
+      // totalPages: Math.ceil(moviesData.length / 20),
+      totalPages: moviesData.length,
+      totalResults: moviesData.length,
+    });
+  };
+
+  onMoviesRated = async (movies) => {
+    // console.log(movies);
+    const transformedData = await movies.map((movie) => ({
+      id: movie.id,
+      genreIds: movie.genres.map((obj) => obj.id),
+      overview: movie.overview,
+      releaseDate: movie.release_date,
+      title: movie.title,
+      posterPath: movie.poster_path,
+      voteAverage: movie.vote_average,
+    }));
+    this.setState({ data: transformedData });
+  };
+
+  onTabsChange = (tab) => {
+    if (tab === 'rated') {
+      this.onRate();
+    } else this.onSearch();
   };
 
   render() {
@@ -244,17 +214,21 @@ export default class App extends Component {
       error,
       // eslint-disable-next-line no-unused-vars
       // loading,
+      // eslint-disable-next-line no-unused-vars
       search,
-      // selectedPage, savedInputSearch, savedCurrentPage
+      genres,
+      totalResults,
+      // totalPages,
     } = this.state;
 
     const searchPanel = <SearchPanel onSearch={this.onSearch} key="searchPanel" />;
-    const content = noElements ? <NoElements key="noEl" /> : <MoviesList options={this.state} key="movieList" />;
+    const moviesList = noElements ? <NoElements key="noEl" /> : <MoviesList options={this.state} key="movieList" />;
 
-    const noNeedPagination = error || noElements || data.length < 20;
-    const pagination = noNeedPagination ? null : (
-      <MoviePagination totalPages={this.state.totalPages} onPageChange={(page) => this.onSearch(search, page)} />
-    );
+    // const noNeedPagination = error || noElements || data.length < 20;
+    // const pagination =
+    //   error || noElements || data.length < 20 ? null : (
+    //     <MoviePagination total={totalResults} onPageChangeSearch={(page) => this.onSearch(search, page)} />
+    //   );
 
     return (
       <div className="app">
@@ -262,10 +236,67 @@ export default class App extends Component {
           <Alert message="Error" description="Internet connection problems" type="error" showIcon />
         </Offline>
         <Online>
-          <MovieTabs content={content} searchPanel={searchPanel} onSearch={this.onSearch} />
-          {pagination}
+          <GenresContextProvider value={genres}>
+            <Tabs
+              className="movie-tabs"
+              defaultActiveKey="search"
+              destroyInactiveTabPane
+              onChange={(tabsKey) => this.onTabsChange(tabsKey)}
+              items={[
+                {
+                  label: 'Search',
+                  key: 'search',
+                  children: (
+                    <>
+                      {searchPanel}
+                      {moviesList}
+                      {error || noElements || data.length < 20 ? null : (
+                        <MoviePagination
+                          total={totalResults}
+                          onPageChange={(page) => this.onSearch(search, page)}
+                        />
+                      )}
+                    </>
+                  ),
+                },
+                {
+                  label: 'Rated',
+                  key: 'rated',
+                  // disabled: loadingRated,
+                  children: (
+                    <>
+                      {moviesList}
+                      {error || noElements || data.length < 20 ? null : (
+                        <MoviePagination
+                          total={totalResults}
+                          onPageChange={(page) => this.onRate(page)}
+                        />
+                      )}
+                    </>
+                  ),
+                },
+              ]}
+            />
+          </GenresContextProvider>
         </Online>
       </div>
+      // <div className="app">
+      //   <Offline>
+      //     <Alert message="Error" description="Internet connection problems" type="error" showIcon />
+      //   </Offline>
+      //   <Online>
+      //     <GenresContextProvider value={genres}>
+      //       <MovieTabs
+      //         moviesList={moviesList}
+      //         searchPanel={searchPanel}
+      //         onSearch={this.onSearch}
+      //         onRate={this.onRate}
+      //         pagination={pagination}
+      //       />
+      //       {/* {pagination} */}
+      //     </GenresContextProvider>
+      //   </Online>
+      // </div>
     );
     // return (
     //   <div className="app">
@@ -305,7 +336,7 @@ export default class App extends Component {
 }
 
 // return (
-//   <GenresProvider value={genresList}>
+//   <GenresProvider value={genres}>
 //     {error ? <Alert message="Enter the search query above to start" type="error" showIcon /> : null}
 //     <section className='movie-app'>
 //       <Menu

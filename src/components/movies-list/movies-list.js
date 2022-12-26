@@ -23,12 +23,9 @@ export default class MoviesList extends Component {
       return (
         <li key={movie.id} className="movie-item card">
           <MovieCard {...movieProps} />
-          {/* // error={error} loading={loading} /> */}
         </li>
       );
     });
-
-    // const pagination = elements.length !== 0 ? <Pagination defaultCurrent={1} pageSize={20} total={50} /> : null;
 
     const hasData = !(loading || error);
 
@@ -60,10 +57,12 @@ MoviesList.propTypes = {
       // eslint-disable-next-line comma-dangle
     })
   ),
-  error: PropTypes.bool.isRequired,
-  loading: PropTypes.bool.isRequired,
+  error: PropTypes.bool,
+  loading: PropTypes.bool,
 };
 
 MoviesList.defaultProps = {
   data: [],
+  error: false,
+  loading: false,
 };
