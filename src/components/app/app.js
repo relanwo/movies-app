@@ -150,7 +150,7 @@ export default class App extends Component {
     this.setState({ data: transformedData });
   };
 
-  onRate = async (page = 1) => {
+  onRate = async () => {
     this.setState({ loading: true });
     const data = JSON.parse(localStorage.getItem('ratedMovies'));
     console.log(data);
