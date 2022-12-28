@@ -150,28 +150,33 @@ export default class App extends Component {
     this.setState({ data: transformedData });
   };
 
-  onRate = async () => {
-    this.setState({ loading: true });
-    const data = JSON.parse(localStorage.getItem('ratedMovies'));
-    console.log(data);
-    const result = [];
-    // eslint-disable-next-line no-restricted-syntax
-    for await (const i of data) {
-      await this.api
-        .getMovie(i.movieId)
-        .then((item) => result.push(item))
-        .catch((error) => {
-          this.onError(error);
-        });
-    }
-    // console.log(`result onRate ${result}`);
-    // console.log(result);
-    this.onRatedListLoaded(result);
-    // console.log(result);
-    this.setState({ data: result });
-    // console.log(this.state);
-    // this.setState({ loading: false });
-  };
+  onRate = async (page = 1) => this.api
+  //   .getRated(page)
+  //   .then(this.onRatedListLoaded)
+  // // .then(console.log(this.state.data))
+  //   .catch((error) => {
+  //     this.onError(error);
+  //   });
+  // this.setState({ loading: true });
+  // const data = JSON.parse(localStorage.getItem('ratedMovies'));
+  // console.log(data);
+  // const result = [];
+  // // eslint-disable-next-line no-restricted-syntax
+  // for await (const i of data) {
+  //   await this.api
+  //     .getMovie(i.movieId)
+  //     .then((item) => result.push(item))
+  //     .catch((error) => {
+  //       this.onError(error);
+  //     });
+  // }
+  // // console.log(`result onRate ${result}`);
+  // // console.log(result);
+  // this.onRatedListLoaded(result);
+  // // console.log(result);
+  // this.setState({ data: result });
+  // // console.log(this.state);
+  // // this.setState({ loading: false });
 
   // eslint-disable-next-line react/no-unused-class-component-methods
   onRatedListLoaded = (moviesData) => {
