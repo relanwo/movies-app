@@ -1,0 +1,3 @@
+    const pages = ratedMovies.reduce(() => {
+
+    }, {});

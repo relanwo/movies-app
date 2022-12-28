@@ -1,9 +1,8 @@
 import { Component } from 'react';
-// import { LoadingOutlined } from '@ant-design/icons';
 import { Spin } from 'antd';
+import { PropTypes } from 'prop-types';
 
 import './progressive_image.css';
-// const loader = <Spin style={{ fontSize: 12 }} />;
 
 export default class ProgressiveImage extends Component {
   constructor(props) {
@@ -13,7 +12,6 @@ export default class ProgressiveImage extends Component {
 
   render() {
     const { loading } = this.state;
-    // eslint-disable-next-line react/prop-types
     const { posterPath } = this.props;
 
     const poster = posterPath === null
@@ -22,14 +20,16 @@ export default class ProgressiveImage extends Component {
     return (
       <>
         {loading ? <Spin /> : null}
-        <img
-          className="poster"
-          alt="film preview"
-          // style={loading ? { display: 'none' } : {}}
-          src={poster}
-          onLoad={() => this.setState({ loading: false })}
-        />
+        <img className="poster" alt="film preview" src={poster} onLoad={() => this.setState({ loading: false })} />
       </>
     );
   }
 }
+
+ProgressiveImage.propTypes = {
+  posterPath: PropTypes.string,
+};
+
+ProgressiveImage.defaultProps = {
+  posterPath: null,
+};

@@ -1,16 +1,10 @@
 /* eslint-disable react/prop-types */
-/* eslint-disable no-console */
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-// import { PropTypes } from 'prop-types';
 import { Spin, Alert } from 'antd';
 
 import MovieCard from '../movie-card/movie-card';
-// import MoviesPagination from '../movies-pagination/movies-pagination';
 
 import './movies-list.css';
-
-// const { Footer, Content } = Layout;
 
 export default class MoviesList extends Component {
   render() {
@@ -42,24 +36,6 @@ export default class MoviesList extends Component {
     );
   }
 }
-
-MoviesList.propTypes = {
-  data: PropTypes.arrayOf(
-    PropTypes.shape({
-      // color: React.PropTypes.string.isRequired,
-      // fontSize: React.PropTypes.number.isRequired,
-      id: PropTypes.number.isRequired,
-      title: PropTypes.string.isRequired,
-      releaseDate: PropTypes.string,
-      // genreIds:,
-      voteAverage: PropTypes.number.isRequired,
-      overview: PropTypes.string,
-      // eslint-disable-next-line comma-dangle
-    })
-  ),
-  error: PropTypes.bool,
-  loading: PropTypes.bool,
-};
 
 MoviesList.defaultProps = {
   data: [],
